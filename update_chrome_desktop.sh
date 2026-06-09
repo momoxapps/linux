@@ -7,7 +7,7 @@ echo "CHROME DESKTOP UPDATE STARTED: $(date)"
 echo "================================================="
 
 echo
-echo "[STEP 1] Checking Chrome desktop entry..."
+echo "[STEP 1] Enable silent printing in Google Chrome..."
 
 DESKTOP_FILE="/home/user/.local/share/applications/google-chrome.desktop"
 
@@ -23,7 +23,7 @@ fi
 echo "[INFO] Desktop file found"
 
 echo
-echo "[STEP 2] Creating backup..."
+echo "[STEP 2] Backup current Chrome launcher configuration..."
 
 cp -f "$DESKTOP_FILE" "${DESKTOP_FILE}.bak"
 
@@ -31,18 +31,17 @@ echo "[INFO] Backup created:"
 echo "       ${DESKTOP_FILE}.bak"
 
 echo
-echo "[STEP 3] Updating Chrome launch options..."
+echo "[STEP 3] Configure Chrome kiosk printing and certificate bypass..."
 
-sed -i 
-'s|^Exec=/usr/bin/google-chrome.*|Exec=/usr/bin/google-chrome --kiosk-printing --ignore-certificate-errors %U|' 
-"$DESKTOP_FILE"
+sed -i 's|^Exec=/usr/bin/google-chrome.*|Exec=/usr/bin/google-chrome --kiosk-printing --ignore-certificate-errors %U|' "$DESKTOP_FILE"
 
 echo
 echo "[STEP 4] Verifying configuration..."
 
-if grep -q -- "--kiosk-printing" "$DESKTOP_FILE"; then
+if grep -q -- "--kiosk-printing --ignore-certificate-errors" "$DESKTOP_FILE"; then
 
-echo "[INFO] Chrome desktop entry updated successfully"
+echo "[INFO] Silent printing enabled successfully"
+echo "[INFO] Certificate warnings will be ignored"
 
 else
 
