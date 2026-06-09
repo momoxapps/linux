@@ -70,9 +70,7 @@ echo "================================================="
 echo
 echo "[STEP 1] Configure Onboard virtual keyboard..."
 
-wget -O /tmp/setup_onboard.sh 
-https://raw.githubusercontent.com/momoxapps/linux/main/setup_onboard.sh
-
+wget -O /tmp/setup_onboard.sh https://raw.githubusercontent.com/momoxapps/linux/main/setup_onboard.sh
 bash /tmp/setup_onboard.sh
 
 ############################################
@@ -82,9 +80,7 @@ bash /tmp/setup_onboard.sh
 echo
 echo "[STEP 2] Apply standardized XFCE panel layout..."
 
-wget -O /tmp/fix_xfce_panel.sh 
-https://raw.githubusercontent.com/momoxapps/linux/main/fix_xfce_panel.sh
-
+wget -O /tmp/fix_xfce_panel.sh https://raw.githubusercontent.com/momoxapps/linux/main/fix_xfce_panel.sh
 bash /tmp/fix_xfce_panel.sh
 
 ############################################
@@ -94,9 +90,7 @@ bash /tmp/fix_xfce_panel.sh
 echo
 echo "[STEP 3] Install power management menu..."
 
-wget -O /tmp/update_shutdown_ask.sh 
-https://raw.githubusercontent.com/momoxapps/linux/main/update_shutdown_ask.sh
-
+wget -O /tmp/update_shutdown_ask.sh https://raw.githubusercontent.com/momoxapps/linux/main/update_shutdown_ask.sh
 bash /tmp/update_shutdown_ask.sh
 
 ############################################
@@ -106,9 +100,7 @@ bash /tmp/update_shutdown_ask.sh
 echo
 echo "[STEP 4] Install or change Google Chrome version..."
 
-wget -O /tmp/chrome_version_manager.sh 
-https://raw.githubusercontent.com/momoxapps/linux/main/chrome_version_manager.sh
-
+wget -O /tmp/chrome_version_manager.sh https://raw.githubusercontent.com/momoxapps/linux/main/chrome_version_manager.sh
 bash /tmp/chrome_version_manager.sh
 
 ############################################
@@ -118,9 +110,7 @@ bash /tmp/chrome_version_manager.sh
 echo
 echo "[STEP 5] Configure label printer and CUPS..."
 
-wget -O /tmp/setup_printer.sh 
-https://raw.githubusercontent.com/momoxapps/linux/main/setup_printer.sh
-
+wget -O /tmp/setup_printer.sh https://raw.githubusercontent.com/momoxapps/linux/main/setup_printer.sh
 bash /tmp/setup_printer.sh
 
 ############################################
@@ -130,9 +120,7 @@ bash /tmp/setup_printer.sh
 echo
 echo "[STEP 6] Enable silent printing in Google Chrome..."
 
-wget -O /tmp/update_chrome_desktop.sh 
-https://raw.githubusercontent.com/momoxapps/linux/main/update_chrome_desktop.sh
-
+wget -O /tmp/update_chrome_desktop.sh https://raw.githubusercontent.com/momoxapps/linux/main/update_chrome_desktop.sh
 bash /tmp/update_chrome_desktop.sh
 
 ############################################
@@ -142,9 +130,7 @@ bash /tmp/update_chrome_desktop.sh
 echo
 echo "[STEP 7] Configure Chrome enterprise policy..."
 
-wget -O /tmp/update_chrome_policy.sh 
-https://raw.githubusercontent.com/momoxapps/linux/main/update_chrome_policy.sh
-
+wget -O /tmp/update_chrome_policy.sh https://raw.githubusercontent.com/momoxapps/linux/main/update_chrome_policy.sh
 bash /tmp/update_chrome_policy.sh
 
 ############################################
