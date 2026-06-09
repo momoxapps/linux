@@ -45,32 +45,23 @@ python3 - <<'PY'
 from pathlib import Path
 
 f = Path("/usr/lib/python3/dist-packages/Onboard/Keyboard.py")
+
 txt = f.read_text()
 
 old = """elif key_type == KeyCommon.MACRO_TYPE:
-snippet_id = int(key.code)
-self._edit_snippet(view, snippet_id)
-long_pressed = True"""
+                snippet_id = int(key.code)
+                self._edit_snippet(view, snippet_id)
+                long_pressed = True"""
 
 new = """elif key_type == KeyCommon.MACRO_TYPE:
-long_pressed = True"""
+                long_pressed = True"""
 
-status = "not_found"
-
-if new in txt:
-status = "already"
-
-elif old in txt:
-txt = txt.replace(old, new, 1)
-f.write_text(txt)
-status = "patched"
-
-if status == "already":
-print("[INFO] Patch already installed")
-elif status == "patched":
-print("[INFO] Patch applied successfully")
+if old in txt:
+    txt = txt.replace(old, new, 1)
+    f.write_text(txt)
+    print("Patched successfully")
 else:
-print("[WARN] Expected code block not found")
+    print("Pattern not found, file may already be patched")
 PY
 
 ########################################
