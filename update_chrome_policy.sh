@@ -89,18 +89,18 @@ import urllib.request
 url = "https://raw.githubusercontent.com/momoxapps/lej/refs/heads/main/default_policy.json"
 
 with urllib.request.urlopen(url) as r:
-data = json.loads(r.read().decode("utf-8"))
+    data = json.loads(r.read().decode("utf-8"))
 
 pack_url = "$PACK_URL"
 
 for item in data.get("ManagedBookmarks", []):
-if item.get("name") == "B&M Pack":
-item["url"] = pack_url
+    if item.get("name") == "B&M Pack":
+        item["url"] = pack_url
 
 data["RestoreOnStartupURLs"] = [pack_url]
 
 with open("$TMP_FILE", "w") as f:
-json.dump(data, f, indent=2)
+    json.dump(data, f, indent=2)
 EOF
 
 echo "[INFO] Policy template updated"
