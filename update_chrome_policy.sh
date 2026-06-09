@@ -26,13 +26,12 @@ echo "[STEP 2] Creating backup..."
 
 if [ -f "$POLICY_FILE" ]; then
 
-```
+
 cp "$POLICY_FILE" \
    "${BACKUP_DIR}/default_policy.json.bak"
 
 echo "[INFO] Backup created:"
 echo "       ${BACKUP_DIR}/default_policy.json.bak"
-```
 
 fi
 
@@ -43,20 +42,17 @@ STATION=""
 
 if [ -f "$POLICY_FILE" ]; then
 
-```
 STATION=$(
     grep -oP 'shipping_outbound/pack_nll/\K[0-9]+' \
     "$POLICY_FILE" \
     | head -n1 \
     || true
 )
-```
 
 fi
 
 if [ -z "${STATION:-}" ]; then
 
-```
 echo "[WARN] No station number found in existing policy"
 
 while true; do
@@ -70,13 +66,10 @@ while true; do
     echo "[ERROR] Station number must contain digits only"
 
 done
-```
 
 else
 
-```
 echo "[INFO] Detected station number: $STATION"
-```
 
 fi
 
