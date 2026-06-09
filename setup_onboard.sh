@@ -60,23 +60,23 @@ f = Path("/usr/lib/python3/dist-packages/Onboard/Keyboard.py")
 txt = f.read_text()
 
 old = """elif key_type == KeyCommon.MACRO_TYPE:
-snippet_id = int(key.code)
-self._edit_snippet(view, snippet_id)
-long_pressed = True"""
+                snippet_id = int(key.code)
+                self._edit_snippet(view, snippet_id)
+                long_pressed = True"""
 
 new = """elif key_type == KeyCommon.MACRO_TYPE:
-long_pressed = True"""
+                long_pressed = True"""
 
 if new in txt:
-print("[INFO] Patch already installed")
+    print("[INFO] Patch already installed")
 
 elif old in txt:
-txt = txt.replace(old, new, 1)
-f.write_text(txt)
-print("[INFO] Patch applied successfully")
+    txt = txt.replace(old, new, 1)
+    f.write_text(txt)
+    print("[INFO] Patch applied successfully")
 
 else:
-print("[ERROR] Expected code block not found")
+    print("[WARN] Expected code block not found")
 PY
 
 ########################################
