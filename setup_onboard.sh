@@ -119,13 +119,15 @@ SNIPPETS='["0:E-:E-","1:lej_:lej_","2:@momox.biz:@momox.biz","3:@:@","4:--:--","
 
 su - "$TARGET_USER" -c "
 export DISPLAY=:0
-export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus
+
 gsettings set org.onboard snippets '$SNIPPETS'
 "
 
 CURRENT=$(su - "$TARGET_USER" -c '
 export DISPLAY=:0
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus
+
 gsettings get org.onboard snippets
 ')
 
@@ -133,9 +135,9 @@ echo "[INFO] Current snippets:"
 echo "$CURRENT"
 
 if echo "$CURRENT" | grep -q "0:E-:E-"; then
-echo "[INFO] Snippets configured successfully"
+    echo "[INFO] Snippets configured successfully"
 else
-echo "[ERROR] Failed to configure snippets"
+    echo "[ERROR] Failed to configure snippets"
 fi
 
 ########################################
