@@ -140,26 +140,29 @@ fi
 echo
 echo "[STEP 4] Configure predefined text snippets"
 
-su - "$TARGET_USER" -c '
+SNIPPETS='["0:E-:E-","1:lej_:lej_","2:@momox.biz:@momox.biz","3:@:@","4:--:--","5:--:--","6:--:--","7:--:--","8:--:--","9:--:--","10:--:--","11:--:--","12:--:--","13:--:--","14:--:--","15:--:--"]'
+
+su - "$TARGET_USER" -c "
 export DISPLAY=:0
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus
 
-BUS="/run/user/$(id -u)/bus"
+gsettings set org.onboard snippets '$SNIPPETS'
+"
 
-if [ -S "$BUS" ]; then
-export DBUS_SESSION_BUS_ADDRESS="unix:path=$BUS"
-fi
+CURRENT=$(su - "$TARGET_USER" -c '
+export DISPLAY=:0
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus
 
-gsettings set org.onboard snippets "["0:E-1:E-","1:lej_:lej_","2:@momox.biz:@momox.biz","3:@:@","4:--:--","5:--:--","6:--:--","7:--:--","8:--:--","9:--:--","10:--:--","11:--:--","12:--:--","13:--:--","14:--:--","15:--:--"]"
-'
+gsettings get org.onboard snippets
+')
 
-VERIFY_SNIPPETS=$(su - "$TARGET_USER" -c '
-gsettings get org.onboard snippets 2>/dev/null
-' || true)
+echo "[INFO] Current snippets:"
+echo "$CURRENT"
 
-if echo "$VERIFY_SNIPPETS" | grep -q "lej_"; then
-echo "[INFO] Snippets configured successfully"
+if echo "$CURRENT" | grep -q "EE-"; then
+    echo "[INFO] Snippets configured successfully"
 else
-echo "[WARN] Unable to verify snippet configuration"
+    echo "[ERROR] Failed to configure snippets"
 fi
 
 ########################################
