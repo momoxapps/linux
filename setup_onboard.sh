@@ -2,13 +2,6 @@
 
 set -euo pipefail
 
-LOG_FILE="/var/log/setup_onboard.log"
-
-mkdir -p "$(dirname "$LOG_FILE")"
-touch "$LOG_FILE"
-
-exec > >(tee -a "$LOG_FILE") 2>&1
-
 echo "====================================="
 echo "SETUP ONBOARD STARTED: $(date)"
 echo "====================================="
@@ -60,23 +53,23 @@ f = Path("/usr/lib/python3/dist-packages/Onboard/Keyboard.py")
 txt = f.read_text()
 
 old = """elif key_type == KeyCommon.MACRO_TYPE:
-                snippet_id = int(key.code)
-                self._edit_snippet(view, snippet_id)
-                long_pressed = True"""
+snippet_id = int(key.code)
+self._edit_snippet(view, snippet_id)
+long_pressed = True"""
 
 new = """elif key_type == KeyCommon.MACRO_TYPE:
-                long_pressed = True"""
+long_pressed = True"""
 
 if new in txt:
-    print("[INFO] Patch already installed")
+print("[INFO] Patch already installed")
 
 elif old in txt:
-    txt = txt.replace(old, new, 1)
-    f.write_text(txt)
-    print("[INFO] Patch applied successfully")
+txt = txt.replace(old, new, 1)
+f.write_text(txt)
+print("[INFO] Patch applied successfully")
 
 else:
-    print("[WARN] Expected code block not found")
+print("[WARN] Expected code block not found")
 PY
 
 ########################################
@@ -100,7 +93,7 @@ echo "[INFO] Onboard restarted"
 
 ########################################
 
-# STEP 3 - CONFIGURE AT-SPI
+# STEP 3 - ENABLE AT-SPI
 
 ########################################
 
@@ -109,19 +102,15 @@ echo "[STEP 3] Enable AT-SPI key injection"
 
 su - "$TARGET_USER" -c '
 export DISPLAY=:0
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus
 
-BUS="/run/user/$(id -u)/bus"
-
-if [ -S "$BUS" ]; then
-export DBUS_SESSION_BUS_ADDRESS="unix:path=$BUS"
-fi
-
-if command -v gsettings >/dev/null 2>&1; then
 gsettings set org.onboard.keyboard key-synth "AT-SPI"
-fi
 '
 
 VERIFY_ATSPI=$(su - "$TARGET_USER" -c '
+export DISPLAY=:0
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus
+
 gsettings get org.onboard.keyboard key-synth 2>/dev/null
 ' || true)
 
@@ -144,26 +133,43 @@ SNIPPETS='["0:E-:E-","1:lej_:lej_","2:@momox.biz:@momox.biz","3:@:@","4:--:--","
 
 su - "$TARGET_USER" -c "
 export DISPLAY=:0
-export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/\$(id -u)/bus
-
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus
 gsettings set org.onboard snippets '$SNIPPETS'
 "
 
 CURRENT=$(su - "$TARGET_USER" -c '
 export DISPLAY=:0
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus
-
 gsettings get org.onboard snippets
 ')
 
 echo "[INFO] Current snippets:"
 echo "$CURRENT"
 
-if echo "$CURRENT" | grep -q "EE-"; then
-    echo "[INFO] Snippets configured successfully"
+if echo "$CURRENT" | grep -q "0:E-:E-"; then
+echo "[INFO] Snippets configured successfully"
 else
-    echo "[ERROR] Failed to configure snippets"
+echo "[ERROR] Failed to configure snippets"
 fi
+
+########################################
+
+# STEP 5 - RELOAD ONBOARD
+
+########################################
+
+echo
+echo "[STEP 5] Reload Onboard configuration"
+
+pkill onboard 2>/dev/null || true
+
+su - "$TARGET_USER" -c '
+DISPLAY=:0 onboard >/dev/null 2>&1 &
+' || true
+
+sleep 2
+
+echo "[INFO] Onboard configuration reloaded"
 
 ########################################
 
