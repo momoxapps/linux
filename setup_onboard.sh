@@ -7,9 +7,7 @@ echo "SETUP ONBOARD STARTED: $(date)"
 echo "====================================="
 
 ########################################
-
 # DETECT TARGET USER
-
 ########################################
 
 TARGET_USER="${SUDO_USER:-user}"
@@ -29,9 +27,7 @@ fi
 echo "[INFO] Using user: $TARGET_USER"
 
 ########################################
-
 # STEP 1 - PATCH ONBOARD
-
 ########################################
 
 echo
@@ -49,7 +45,6 @@ python3 - <<'PY'
 from pathlib import Path
 
 f = Path("/usr/lib/python3/dist-packages/Onboard/Keyboard.py")
-
 txt = f.read_text()
 
 old = """elif key_type == KeyCommon.MACRO_TYPE:
@@ -60,22 +55,26 @@ long_pressed = True"""
 new = """elif key_type == KeyCommon.MACRO_TYPE:
 long_pressed = True"""
 
+status = "not_found"
+
 if new in txt:
-print("[INFO] Patch already installed")
+status = "already"
 
 elif old in txt:
 txt = txt.replace(old, new, 1)
 f.write_text(txt)
-print("[INFO] Patch applied successfully")
+status = "patched"
 
+if status == "already":
+print("[INFO] Patch already installed")
+elif status == "patched":
+print("[INFO] Patch applied successfully")
 else:
 print("[WARN] Expected code block not found")
 PY
 
 ########################################
-
 # STEP 2 - RESTART ONBOARD
-
 ########################################
 
 echo
@@ -92,9 +91,7 @@ sleep 1
 echo "[INFO] Onboard restarted"
 
 ########################################
-
 # STEP 3 - ENABLE AT-SPI
-
 ########################################
 
 echo
@@ -121,9 +118,7 @@ echo "[WARN] Unable to verify AT-SPI configuration"
 fi
 
 ########################################
-
 # STEP 4 - CONFIGURE SNIPPETS
-
 ########################################
 
 echo
@@ -153,9 +148,7 @@ echo "[ERROR] Failed to configure snippets"
 fi
 
 ########################################
-
 # STEP 5 - RELOAD ONBOARD
-
 ########################################
 
 echo
@@ -172,9 +165,7 @@ sleep 2
 echo "[INFO] Onboard configuration reloaded"
 
 ########################################
-
 # DONE
-
 ########################################
 
 echo
