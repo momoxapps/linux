@@ -64,29 +64,13 @@ else:
     print("Pattern not found, file may already be patched")
 PY
 
-########################################
-# STEP 2 - RESTART ONBOARD
-########################################
-
-echo
-echo "[STEP 2] Restart Onboard virtual keyboard"
-
-pkill onboard 2>/dev/null || true
-
-su - "$TARGET_USER" -c '
-DISPLAY=:0 onboard >/dev/null 2>&1 &
-' || true
-
-sleep 1
-
-echo "[INFO] Onboard restarted"
 
 ########################################
-# STEP 3 - ENABLE AT-SPI
+# STEP 2 - ENABLE AT-SPI
 ########################################
 
 echo
-echo "[STEP 3] Enable AT-SPI key injection"
+echo "[STEP 2] Enable AT-SPI key injection"
 
 su - "$TARGET_USER" -c '
 export DISPLAY=:0
@@ -109,11 +93,11 @@ echo "[WARN] Unable to verify AT-SPI configuration"
 fi
 
 ########################################
-# STEP 4 - CONFIGURE SNIPPETS
+# STEP 3 - CONFIGURE SNIPPETS
 ########################################
 
 echo
-echo "[STEP 4] Configure predefined text snippets"
+echo "[STEP 3] Configure predefined text snippets"
 
 SNIPPETS='["0:E-:E-","1:lej_:lej_","2:@momox.biz:@momox.biz","3:@:@","4:--:--","5:--:--","6:--:--","7:--:--","8:--:--","9:--:--","10:--:--","11:--:--","12:--:--","13:--:--","14:--:--","15:--:--"]'
 
@@ -141,11 +125,11 @@ else
 fi
 
 ########################################
-# STEP 5 - RELOAD ONBOARD
+# STEP 4 - RELOAD ONBOARD
 ########################################
 
 echo
-echo "[STEP 5] Reload Onboard configuration"
+echo "[STEP 4] Reload Onboard configuration"
 
 pkill onboard 2>/dev/null || true
 
